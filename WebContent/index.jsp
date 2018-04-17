@@ -19,7 +19,14 @@
 <link href="umeditor/themes/default/css/umeditor.css" rel="stylesheet">
 
 <style type="text/css">
-
+ .title{
+ 	text-align:center;
+ }
+ .chat-content-container{
+ 	height:29rem;
+ 	overflow-y:scroll;
+ 	border:1px solid silver;
+ }
 </style>
 </head>
 <body>
@@ -56,8 +63,36 @@
 				</form>
 			</div>
 		</div>
-		<div class=""></div>
-		
+		<div class="am-g am-g-fixed am-margin-top">
+			<div class="am-u-sm-6">
+				<div id="message-input-nickname" class="am-input-group am-input-group-primary">
+					<span class="am-input-group-label"><i class="an-icon-user"></i></span>
+					<input id="nickname" type="text" class="am-form-field" placeholder="请输入你的昵称"/>
+				</div>
+			</div>
+			<div class="am-u-sm-6">
+				<button id="send" type="button" class="am-btn am-btn-primary">
+					<i class="am-icon-send"></i>发送
+				</button>
+			</div>
+		</div>
 	</div>
+	<!-- message input end -->
+	
+	<!-- [if(gte IE9)|(IE)] -->
+	<script src="assets/js/jquery.min.js"></script>
+	
+	<script charset="utf-8" src="umeditor/ueditor.config.js"></script>
+    <script charset="utf-8" src="ueditor.all.min.js"></script>
+    <script src="umeditor/lang/zh-cn/zh-cn.js"></script>
+    
+    <script >
+    	$(function(){
+    		//初始化消息框
+    		var um = UM.getEditor('myEditor');
+    		//昵称框获得焦点
+    		$('#nickname')[0].focus();
+    	});
+    </script>
 </body>
 </html>
