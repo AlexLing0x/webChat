@@ -1,5 +1,5 @@
 # webChat
-Java 和 WebSocket实现网页聊天室，前端使用AmazeUI，后台Java，编辑器UMEditor
+Java 和 WebSocket实现网页聊天室，前端使用AmazeUI，后台Java，编辑器UMEditor。
 
 WebSocket是什么？
 
