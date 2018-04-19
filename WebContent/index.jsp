@@ -100,7 +100,37 @@
             // 使昵称框获取焦点
             $('#nickname')[0].focus();
         });
-    </script>
+        
+        //新建一个webSocket对象，最后的/webSocket对应服务器端的@ServerEndPoint("/websocket")
+        var socket = new WebSocket('ws://${pageContext.request.getServerName()}:${pageContext.request.getServerPort()}${pageContext.request.contextPath}/websocket');
+        //处理服务器端发送的数据
+        socket.onmessage = function(event){
+        	addMessage(event.data);
+        }
+        //点击Send按钮
+        $('#send').on('click',function(){
+        	var nickname = $('#nickname').val();
+        	if(!um.hasContents()){	//判断消息框是否为空
+        		um.focus();		//消息框获得输入焦点
+        		$('.edui-container').addClass('am-animation-shake');	//添加抖动效果
+        		setTimeout("$('.edui-container').removeClass('am-animation-shake')",1000); //去除抖动效果
+        		} else if(nickname == ''){    //判断昵称框是否为空
+        			$('#nickname')[0].focus();  //昵称框获得输入焦点
+        			$('#message-input-nicknam').addClass('am-animation-shake');	//添加抖动效果
+            		setTimeout("$('#message-input-nicknam').removeClass('am-animation-shake')",1000); //去除抖动效果
+        		}else{
+        			//发送消息
+        			socket.send(JSON.stringify({	//JSON.stringify() 方法用于将 JavaScript 值转换为 JSON 字符串(通常为对象或数组)。
+        				content : um.getContent(),
+        				nickname : nickname
+        			}));
+        			//清空消息框并获得焦点
+        			um.setContent('');
+        			um.focus();
+        		}
+        	});
+        
+        </script>
 </body>
 </html>
 	
