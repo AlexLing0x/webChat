@@ -92,21 +92,19 @@
 	<script charset="utf-8" src="umeditor/umeditor.min.js"></script>
 	<script src="umeditor/lang/zh-cn/zh-cn.js"></script>
 	
-	
-	   <script>
+   <script>
         $(function() {
             // 初始化消息输入框
             var um = UM.getEditor('myEditor');
             // 使昵称框获取焦点
             $('#nickname')[0].focus();
-        });
         
         //新建一个webSocket对象，最后的/webSocket对应服务器端的@ServerEndPoint("/websocket")
         var socket = new WebSocket('ws://${pageContext.request.getServerName()}:${pageContext.request.getServerPort()}${pageContext.request.contextPath}/websocket');
         //处理服务器端发送的数据
         socket.onmessage = function(event){
         	addMessage(event.data);
-        }
+        };
         //点击Send按钮
         $('#send').on('click',function(){
         	var nickname = $('#nickname').val();
@@ -120,7 +118,7 @@
             		setTimeout("$('#message-input-nicknam').removeClass('am-animation-shake')",1000); //去除抖动效果
         		}else{
         			//发送消息
-        			socket.send(JSON.stringify({	//JSON.stringify() 方法用于将 JavaScript 值转换为 JSON 字符串(通常为对象或数组)。
+        			socket.send(JSON.stringify({	//JSON.stringify() 方法用于将 JavaScript 对象转换为 JSON格式的字符串。
         				content : um.getContent(),
         				nickname : nickname
         			}));
@@ -130,7 +128,27 @@
         		}
         	});
         
-        </script>
+        //把消息添加到消息框中
+        function addMessage(message){
+        	message = JSON.parse(message);//将JSON格式的数据转换为JavaScript对象
+        	var messageItem = '<li class="am-comment '
+        			+(message.isSelf ? 'am-comment-flip' : 'am-comment')
+        			+ '">'
+        			+'<a href="javascript:void(0)"><img src="assets/images/'
+        			+(message.isSelf ? 'self.png' : 'others.jpg')
+        			+'" alt="" class="am-comment-avatar" width="50" height="50"/></a>'
+        			+'<div class="am-comment-main"><header class="am-comment-hd"><div class="am-comment-meta">'
+        			+'<a href="javascript:void(0)" class="am-comment-author">'
+        			+ message.nickname + '</a><time>'+message.date
+        			+'</time></div></header>'
+        			+'<div class="am-comment-bd">'+message.content
+        			+'</div></div></li>';
+        	$(messageItem).appendTo('#message-list');
+        	//把滚动条滚到底部
+        	$(".chat-content-container").scrollTop($(".chat-content-container")[0].scrollHeight);
+        }
+      });
+    </script>
 </body>
 </html>
 	
